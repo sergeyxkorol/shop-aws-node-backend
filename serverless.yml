@@ -12,16 +12,16 @@ functions:
     handler: src/functions/index.getProductsList
     events:
       - http:
-        path: products
-        method: get
-        cors: true
+          path: products
+          method: get
+          cors: true
   getProductById:
     handler: src/functions/index.getProductById
     events:
       - http:
-        path: products/{productId}
-        method: get
-        cors: true
+          path: products/{productId}
+          method: get
+          cors: true
 
 plugins:
   - serverless-esbuild

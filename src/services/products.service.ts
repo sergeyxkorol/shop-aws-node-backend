@@ -1,5 +1,5 @@
-import * as products from "src/mocks/products.json";
-import { Product } from "src/types/product";
+import { products } from "src/data/products";
+import { Product } from "src/models/product";
 
 class ProductsService {
   async getAll(): Promise<Product[] | {}[]> {
