@@ -1,4 +1,4 @@
-import ProductsService from "src/services/products.service";
+import ProductsService from "@services/products.service";
 
 const getProductById = async (event) => {
   const { productId } = event.pathParameters;

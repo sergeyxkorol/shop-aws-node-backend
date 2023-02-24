@@ -1,5 +1,5 @@
-import { products } from "src/data/products";
-import { Product } from "src/models/product";
+import { products } from "@data/products";
+import { Product } from "@models/product";
 
 class ProductsService {
   async getAll(): Promise<Product[] | {}[]> {
