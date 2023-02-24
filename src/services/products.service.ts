@@ -9,10 +9,6 @@ class ProductsService {
   async getById(id: string): Promise<Product | {}> {
     const product = products.find((product: Product) => product.id === id);
 
-    if (!product) {
-      return Promise.reject();
-    }
-
     return Promise.resolve(product);
   }
 }
