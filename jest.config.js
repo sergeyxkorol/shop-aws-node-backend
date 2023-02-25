@@ -7,8 +7,9 @@ module.exports = {
   },
 
   moduleNameMapper: {
-    "@data/products": "<rootDir>/src/data/products",
-    "@models/products": "<rootDir>/src/models/products",
-    "@services/products.service": "<rootDir>/src/services/products.service",
+    "@data/products": "<rootDir>/ProductService/data/products",
+    "@models/products": "<rootDir>/ProductService/models/products",
+    "@services/products.service":
+      "<rootDir>/ProductService/services/products.service",
   },
 };

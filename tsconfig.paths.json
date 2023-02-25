@@ -2,10 +2,10 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@functions/*": ["src/functions/*"],
-      "@data/*": ["src/data/*"],
-      "@models/*": ["src/models/*"],
-      "@services/*": ["src/services/*"]
+      "@functions/*": ["ProductService/functions/*"],
+      "@data/*": ["ProductService/data/*"],
+      "@models/*": ["ProductService/models/*"],
+      "@services/*": ["ProductService/services/*"]
     }
   }
 }

@@ -12,24 +12,29 @@ provider:
 
 functions:
   getProductsList:
-    handler: src/functions/index.getProductsList
+    handler: ProductService/functions/index.getProductsList
     events:
       - http:
           path: products
           method: get
           cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductsList}
   getProductById:
-    handler: src/functions/index.getProductById
+    handler: ProductService/functions/index.getProductById
     events:
       - http:
           path: products/{productId}
           method: get
           cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductById}
 
 plugins:
   - serverless-esbuild
+  - serverless-offline
+  - serverless-openapi-documenter
 
 custom:
+  documentation: ${file(serverless.doc.yml):documentation}
   esbuild:
     bundle: true
     minify: false

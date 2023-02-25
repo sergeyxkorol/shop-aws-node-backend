@@ -5,6 +5,8 @@
   "main": "serverless.ts",
   "scripts": {
     "deploy": "npx sls deploy",
+    "serverless:offline": "sls offline",
+    "openapi:generate": "serverless openapi generate -o openapi.yml -f yaml -a 3.0.3",
     "test": "jest --watch",
     "test:coverage": "jest --coverage"
   },
@@ -25,6 +27,8 @@
     "json-schema-to-ts": "^1.5.0",
     "serverless": "^3.0.0",
     "serverless-esbuild": "^1.39.0",
+    "serverless-offline": "^12.0.4",
+    "serverless-openapi-documenter": "^0.0.47",
     "ts-jest": "^29.0.5",
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.9.0",

@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: shop-aws-node-backend
+  description: ''
+  version: 9333d0d3-3b13-44ff-b245-91a58dd650b1
+components:
+  schemas:
+    ProductsList:
+      type: array
+      items:
+        properties:
+          id:
+            type: string
+            example: 7567ec4b-b10c-48c5-9345-fc73c48a80a1
+          title:
+            type: string
+            example: My awesome product
+          description:
+            type: string
+            example: Product's description
+          price:
+            type: number
+            example: 100500
+          count:
+            type: integer
+            example: 1
+    ErrorResponse:
+      description: Product not found
+    productId:
+      type: string
+      pattern: ^[-a-z0-9_]+$
+    Product:
+      properties:
+        id:
+          type: string
+          example: 7567ec4b-b10c-48c5-9345-fc73c48a80a1
+        title:
+          type: string
+          example: My awesome product
+        description:
+          type: string
+          example: Product's description
+        price:
+          type: number
+          example: 100500
+        count:
+          type: integer
+          example: 1
+paths:
+  /products:
+    get:
+      summary: Get products list
+      description: Sends a list of products
+      operationId: shop-aws-node-backend-dev-getProductsList
+      parameters: []
+      tags: []
+      responses:
+        '200':
+          description: An array of products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductsList'
+        '500':
+          description: An error message when retreiving the product's list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /products/{productId}:
+    get:
+      summary: Get product by ID
+      description: Sends a product
+      operationId: shop-aws-node-backend-dev-getProductById
+      parameters:
+        - name: productId
+          in: path
+          description: Product ID
+          required: true
+          schema:
+            $ref: '#/components/schemas/productId'
+      tags: []
+      responses:
+        '200':
+          description: A product object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '500':
+          description: An error message when retreiving the product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'

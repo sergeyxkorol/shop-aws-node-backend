@@ -1,0 +1,89 @@
+endpoints:
+  getProductsList:
+    summary: Get products list
+    description: Sends a list of products
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: An array of products
+        responseModels:
+          application/json: ProductsList
+      - statusCode: 500
+        responseBody:
+          description: An error message when retreiving the product's list
+        responseModels:
+          application/json: ErrorResponse
+  getProductById:
+    summary: Get product by ID
+    description: Sends a product
+    pathParams:
+      - name: productId
+        description: Product ID
+        schema:
+          type: string
+          pattern: "^[-a-z0-9_]+$"
+    methodResponses:
+      - statusCode: 200
+        responseBody:
+          description: A product object
+        responseModels:
+          application/json: Product
+      - statusCode: 500
+        responseBody:
+          description: An error message when retreiving the product
+        responseModels:
+          application/json: ErrorResponse
+
+documentation:
+  models:
+    - name: ErrorResponse
+      description: This is an error
+      contentType: application/json
+      schema:
+        description: Product not found
+
+    - name: Product
+      description: Get product by ID response model
+      contentType: application/json
+      schema:
+        $schema: "http://json-schema.org/draft-04/schema#"
+        properties:
+          id:
+            type: string
+            example: 7567ec4b-b10c-48c5-9345-fc73c48a80a1
+          title:
+            type: string
+            example: My awesome product
+          description:
+            type: string
+            example: Product's description
+          price:
+            type: number
+            example: 100500
+          count:
+            type: integer
+            example: 1
+
+    - name: ProductsList
+      description: Get products response model
+      contentType: application/json
+      schema:
+        type: array
+        items:
+          $schema: "http://json-schema.org/draft-04/schema#"
+          properties:
+            id:
+              type: string
+              example: 7567ec4b-b10c-48c5-9345-fc73c48a80a1
+            title:
+              type: string
+              example: My awesome product
+            description:
+              type: string
+              example: Product's description
+            price:
+              type: number
+              example: 100500
+            count:
+              type: integer
+              example: 1
