@@ -37,4 +37,6 @@ custom:
   documentation: ${file(serverless.doc.yml):documentation}
   esbuild:
     bundle: true
-    minify: false
+    minify: true
+    sourcemap: true
+    target: "node18"
