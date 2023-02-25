@@ -11,5 +11,7 @@ module.exports = {
     "@models/products": "<rootDir>/ProductService/models/products",
     "@services/products.service":
       "<rootDir>/ProductService/services/products.service",
+    "@constants/errors": "<rootDir>/ProductService/constants/errors",
+    "@constants/headers": "<rootDir>/ProductService/constants/headers",
   },
 };

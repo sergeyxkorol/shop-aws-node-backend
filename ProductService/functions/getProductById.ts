@@ -1,12 +1,10 @@
 import ProductsService from "@services/products.service";
+import { ERROR_500 } from "@constants/errors";
+import { CORS_HEADERS } from "@constants/headers";
 
 const getProductById = async (event) => {
   const { productId } = event.pathParameters;
-
-  const headers = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Credentials": true,
-  };
+  const headers = CORS_HEADERS;
 
   try {
     const product = await ProductsService.getById(productId);
@@ -25,11 +23,7 @@ const getProductById = async (event) => {
       body: JSON.stringify(product),
     };
   } catch (error) {
-    return {
-      headers,
-      statusCode: 500,
-      body: "Internal server error",
-    };
+    return ERROR_500;
   }
 };
 

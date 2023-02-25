@@ -5,7 +5,8 @@
       "@functions/*": ["ProductService/functions/*"],
       "@data/*": ["ProductService/data/*"],
       "@models/*": ["ProductService/models/*"],
-      "@services/*": ["ProductService/services/*"]
+      "@services/*": ["ProductService/services/*"],
+      "@constants/*": ["ProductService/constants/*"]
     }
   }
 }
