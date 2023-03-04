@@ -8,14 +8,19 @@
     "serverless:offline": "sls offline",
     "openapi:generate": "serverless openapi generate -o openapi.yml -f yaml -a 3.0.3",
     "test": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "buildFillDBScript": "esbuild ./ProductService/data/fillDBTables.js --bundle --outfile=./dist/fillDBTables.js --platform=node --target=node18.0",
+    "fillDatabase": "set REGION=us-east-1 && set PRODUCTS=products-shop-aws-node-backend-dev && set STOCKS=stocks-shop-aws-node-backend-dev && node ./dist/fillDBTables.js"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.284.0",
+    "@aws-sdk/lib-dynamodb": "^3.284.0",
     "@middy/core": "^3.4.0",
-    "@middy/http-json-body-parser": "^3.4.0"
+    "@middy/http-json-body-parser": "^3.4.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@serverless/typescript": "^3.0.0",
