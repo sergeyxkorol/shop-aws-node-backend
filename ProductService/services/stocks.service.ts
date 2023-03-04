@@ -5,9 +5,9 @@ import {
   GetCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-class ProductsService {
+class StocksService {
   private client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
-  private tableName = process.env.PRODUCTS_DYNAMODB_TABLE;
+  private tableName = process.env.STOCKS_DYNAMODB_TABLE;
 
   async getAll() {
     const command = new ScanCommand({
@@ -17,26 +17,24 @@ class ProductsService {
     try {
       return await this.client.send(command);
     } catch (error) {
-      throw new Error("Cannot retreive products");
+      throw new Error("Cannot retreive stocks");
     }
   }
 
-  async getById(id: string) {
+  async getById(productId: string) {
     const command = new GetCommand({
       TableName: this.tableName,
       Key: {
-        id,
+        productId,
       },
     });
 
     try {
       return await this.client.send(command);
     } catch (error) {
-      throw new Error(`Cannot retreive product with id: ${id}`);
+      throw new Error(`Cannot retreive stock with productId: ${productId}`);
     }
   }
-
-  async create() {}
 }
 
-export default new ProductsService();
+export default new StocksService();
