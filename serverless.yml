@@ -69,6 +69,14 @@ functions:
           method: get
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductById}
+  createProduct:
+    handler: ProductService/functions/index.createProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductById}
 
 plugins:
   - serverless-esbuild

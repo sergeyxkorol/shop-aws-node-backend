@@ -3,6 +3,7 @@ import {
   DynamoDBDocumentClient,
   ScanCommand,
   GetCommand,
+  PutCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 class ProductsService {
@@ -36,7 +37,19 @@ class ProductsService {
     }
   }
 
-  async create() {}
+  async create(data) {
+    const { id, title, description, price } = data;
+    const command = new PutCommand({
+      TableName: this.tableName,
+      Item: { id, title, description, price },
+    });
+
+    try {
+      return await this.client.send(command);
+    } catch (error) {
+      throw new Error(`Cannot create a product with data: ${data}`);
+    }
+  }
 }
 
 export default new ProductsService();

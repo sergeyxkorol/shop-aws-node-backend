@@ -4,10 +4,10 @@ import { ERROR_500 } from "@constants/errors";
 import { CORS_HEADERS } from "@constants/headers";
 
 const getProductById = async (event) => {
-  console.log("GET - getProductById");
-
   const { productId } = event.pathParameters;
   const headers = CORS_HEADERS;
+
+  console.log(`GET - getProductById, productId: ${productId}`);
 
   try {
     const { Item: product } = await ProductsService.getById(productId);
