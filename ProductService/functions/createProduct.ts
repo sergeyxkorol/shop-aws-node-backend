@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 import ProductsService from "@services/products.service";
-import StocksService from "@services/stocks.service";
 import { ERROR_500 } from "@constants/errors";
 import { CORS_HEADERS } from "@constants/headers";
 import { validateProduct } from "@models/product";

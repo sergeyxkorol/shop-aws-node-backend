@@ -26,7 +26,7 @@ class BaseService<T, D> {
     this.storedItemName = storedItemName;
   }
 
-  private async send(command, errorMessage): Promise<any> {
+  private async send(command, errorMessage: string): Promise<any> {
     try {
       return await this.client.send(command);
     } catch (error) {
@@ -58,7 +58,7 @@ class BaseService<T, D> {
     );
   }
 
-  public async create(data) {
+  public async create(data: T) {
     const command = new PutCommand({
       TableName: this.tableName,
       Item: data,
@@ -70,10 +70,7 @@ class BaseService<T, D> {
     );
   }
 
-  public async createTransactional<T, D>(
-    mainTableData: T,
-    relatedTableData: D
-  ) {
+  public async createTransactional(mainTableData: T, relatedTableData: D) {
     const mainTableDataString = JSON.stringify(mainTableData);
     const relatedTableDataString = JSON.stringify(mainTableData);
     const command = new TransactWriteCommand({
