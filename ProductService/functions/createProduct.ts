@@ -3,16 +3,28 @@ import ProductsService from "@services/products.service";
 import StocksService from "@services/stocks.service";
 import { ERROR_500 } from "@constants/errors";
 import { CORS_HEADERS } from "@constants/headers";
+import { validateProduct } from "@models/product";
 
 const createProduct = async (event) => {
   const data = event.body;
-  const { title, description, price, count } = JSON.parse(data);
-  const id = uuidv4();
-  const headers = CORS_HEADERS;
-
   console.log(`POST - createProduct, data: ${data}`);
 
   try {
+    const headers = CORS_HEADERS;
+    const parsedData = JSON.parse(data);
+    const validatedProduct = validateProduct(parsedData);
+
+    if (validatedProduct.error) {
+      return {
+        headers,
+        statusCode: 400,
+        body: validatedProduct.error.message,
+      };
+    }
+
+    const { title, description, price, count } = parsedData;
+    const id = uuidv4();
+
     const product = await ProductsService.create({
       id,
       title,
@@ -24,7 +36,7 @@ const createProduct = async (event) => {
     if (!product || !stock) {
       return {
         headers,
-        statusCode: 400,
+        statusCode: 500,
         body: "Product was not created",
       };
     }
