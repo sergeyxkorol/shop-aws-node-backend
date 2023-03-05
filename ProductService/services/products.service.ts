@@ -1,55 +1,12 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import {
-  DynamoDBDocumentClient,
-  ScanCommand,
-  GetCommand,
-  PutCommand,
-} from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { Product } from "@models/product";
+import BaseService from "./base.service";
 
-class ProductsService {
-  private client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
-  private tableName = process.env.PRODUCTS_DYNAMODB_TABLE;
+class ProductsService<T> extends BaseService<T> {}
 
-  async getAll() {
-    const command = new ScanCommand({
-      TableName: this.tableName,
-    });
-
-    try {
-      return await this.client.send(command);
-    } catch (error) {
-      throw new Error("Cannot retreive products");
-    }
-  }
-
-  async getById(id: string) {
-    const command = new GetCommand({
-      TableName: this.tableName,
-      Key: {
-        id,
-      },
-    });
-
-    try {
-      return await this.client.send(command);
-    } catch (error) {
-      throw new Error(`Cannot retreive product with id: ${id}`);
-    }
-  }
-
-  async create(data) {
-    const { id, title, description, price } = data;
-    const command = new PutCommand({
-      TableName: this.tableName,
-      Item: { id, title, description, price },
-    });
-
-    try {
-      return await this.client.send(command);
-    } catch (error) {
-      throw new Error(`Cannot create a product with data: ${data}`);
-    }
-  }
-}
-
-export default new ProductsService();
+export default new ProductsService<Product>(
+  DynamoDBDocumentClient.from(new DynamoDBClient({})),
+  process.env.PRODUCTS_DYNAMODB_TABLE,
+  "product"
+);

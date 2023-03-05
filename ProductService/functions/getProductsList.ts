@@ -29,6 +29,8 @@ const getProductsList = async () => {
       body: JSON.stringify(enrichedProducts),
     };
   } catch (error) {
+    console.error("getProductsList error", error);
+
     return ERROR_500;
   }
 };

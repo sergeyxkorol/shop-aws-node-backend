@@ -24,7 +24,7 @@ const createProduct = async (event) => {
     if (!product || !stock) {
       return {
         headers,
-        statusCode: 500,
+        statusCode: 400,
         body: "Product was not created",
       };
     }
@@ -34,6 +34,8 @@ const createProduct = async (event) => {
       statusCode: 201,
     };
   } catch (error) {
+    console.error("createProduct error", error);
+
     return ERROR_500;
   }
 };

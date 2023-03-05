@@ -10,8 +10,11 @@ const getProductById = async (event) => {
   console.log(`GET - getProductById, productId: ${productId}`);
 
   try {
-    const { Item: product } = await ProductsService.getById(productId);
-    const { Item: stockItem } = await StocksService.getById(productId);
+    const { Item: product } = await ProductsService.getById("id", productId);
+    const { Item: stockItem } = await StocksService.getById(
+      "product_id",
+      productId
+    );
 
     if (!product || !stockItem) {
       return {
@@ -27,6 +30,8 @@ const getProductById = async (event) => {
       body: JSON.stringify({ ...product, count: stockItem.count }),
     };
   } catch (error) {
+    console.error("getProductById error", error);
+
     return ERROR_500;
   }
 };
