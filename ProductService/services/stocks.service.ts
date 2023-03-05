@@ -3,10 +3,10 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { Stock } from "@models/stock";
 import BaseService from "./base.service";
 
-class StocksService<T> extends BaseService<T> {}
+class StocksService<T, D> extends BaseService<T, D> {}
 
-export default new StocksService<Stock>(
-  DynamoDBDocumentClient.from(new DynamoDBClient({})),
-  process.env.STOCKS_DYNAMODB_TABLE,
-  "stock"
-);
+export default new StocksService<Stock, null>({
+  client: DynamoDBDocumentClient.from(new DynamoDBClient({})),
+  tableName: process.env.STOCKS_DYNAMODB_TABLE,
+  storedItemName: "stock",
+});

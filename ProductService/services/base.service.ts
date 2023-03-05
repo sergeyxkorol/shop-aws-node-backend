@@ -3,21 +3,26 @@ import {
   ScanCommand,
   GetCommand,
   PutCommand,
-  ServiceOutputTypes,
+  TransactWriteCommand,
 } from "@aws-sdk/lib-dynamodb";
 
-class BaseService<T> {
+type Props = {
+  client: DynamoDBDocumentClient;
+  tableName: string;
+  relatedTableName?: string;
+  storedItemName: string;
+};
+
+class BaseService<T, D> {
   private client: DynamoDBDocumentClient;
   private tableName: string;
+  private relatedTableName: string;
   private storedItemName: string;
 
-  constructor(
-    client: DynamoDBDocumentClient,
-    tableName: string,
-    storedItemName: string
-  ) {
+  constructor({ client, tableName, relatedTableName, storedItemName }: Props) {
     this.client = client;
     this.tableName = tableName;
+    this.relatedTableName = relatedTableName;
     this.storedItemName = storedItemName;
   }
 
@@ -62,6 +67,32 @@ class BaseService<T> {
     return this.send(
       command,
       `Cannot create a ${this.storedItemName} with data: ${data}`
+    );
+  }
+
+  public async createTransactional<T, D>(
+    mainTableData: T,
+    relatedTableData: D
+  ) {
+    const mainTableDataString = JSON.stringify(mainTableData);
+    const relatedTableDataString = JSON.stringify(mainTableData);
+    const command = new TransactWriteCommand({
+      TransactItems: [
+        {
+          Put: { Item: { ...mainTableData }, TableName: this.tableName },
+        },
+        {
+          Put: {
+            Item: { ...relatedTableData },
+            TableName: this.relatedTableName,
+          },
+        },
+      ],
+    });
+
+    return this.send(
+      command,
+      `Cannot create a ${this.storedItemName} with mainTableData: ${mainTableDataString} and relatedTableData: ${relatedTableDataString}`
     );
   }
 }

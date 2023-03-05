@@ -25,7 +25,8 @@ const createProduct = async (event) => {
     const { title, description, price, count } = parsedData;
     const id = uuidv4();
 
-    const product = await ProductsService.create({
+    // Regular requests
+    /* const product = await ProductsService.create({
       id,
       title,
       description,
@@ -34,6 +35,25 @@ const createProduct = async (event) => {
     const stock = await StocksService.create({ product_id: id, count });
 
     if (!product || !stock) {
+      return {
+        headers,
+        statusCode: 500,
+        body: "Product was not created",
+      };
+    } */
+
+    // Transactional request
+    const product = await ProductsService.createTransactional(
+      {
+        id,
+        title,
+        description,
+        price,
+      },
+      { product_id: id, count }
+    );
+
+    if (!product) {
       return {
         headers,
         statusCode: 500,
