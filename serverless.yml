@@ -76,7 +76,6 @@ functions:
           path: products
           method: post
           cors: true
-          documentation: ${file(serverless.doc.yml):endpoints.getProductById}
 
 plugins:
   - serverless-esbuild
