@@ -1,0 +1,42 @@
+service: shop-aws-node-backend
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: us-east-1
+  profile: default
+  apiGateway:
+    minimumCompressionSize: 1024
+    shouldStartNameWithService: true
+
+functions:
+  getProductsList:
+    handler: ProductService/functions/index.getProductsList
+    events:
+      - http:
+          path: products
+          method: get
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductsList}
+  getProductById:
+    handler: ProductService/functions/index.getProductById
+    events:
+      - http:
+          path: products/{productId}
+          method: get
+          cors: true
+          documentation: ${file(serverless.doc.yml):endpoints.getProductById}
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+  - serverless-openapi-documenter
+
+custom:
+  documentation: ${file(serverless.doc.yml):documentation}
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    target: "node18"

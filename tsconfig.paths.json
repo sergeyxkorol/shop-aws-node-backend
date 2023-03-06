@@ -2,8 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@functions/*": ["src/functions/*"],
-      "@libs/*": ["src/libs/*"]
+      "@functions/*": ["ProductService/functions/*"],
+      "@data/*": ["ProductService/data/*"],
+      "@models/*": ["ProductService/models/*"],
+      "@services/*": ["ProductService/services/*"],
+      "@constants/*": ["ProductService/constants/*"]
     }
   }
 }
