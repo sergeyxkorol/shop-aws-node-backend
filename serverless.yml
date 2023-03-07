@@ -9,6 +9,48 @@ provider:
   apiGateway:
     minimumCompressionSize: 1024
     shouldStartNameWithService: true
+  environment:
+    PRODUCTS_DYNAMODB_TABLE: ${self:custom.productsDynamoDBTableName}
+    STOCKS_DYNAMODB_TABLE: ${self:custom.stocksDynamoDBTableName}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource:
+            - Fn::GetAtt: [ProductsDynamoDBTable, Arn]
+            - Fn::GetAtt: [StocksDynamoDBTable, Arn]
+
+resources:
+  Resources:
+    ProductsDynamoDBTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.productsDynamoDBTableName}
+    StocksDynamoDBTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:custom.stocksDynamoDBTableName}
 
 functions:
   getProductsList:
@@ -27,6 +69,13 @@ functions:
           method: get
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductById}
+  createProduct:
+    handler: ProductService/functions/index.createProduct
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
 
 plugins:
   - serverless-esbuild
@@ -34,7 +83,8 @@ plugins:
   - serverless-openapi-documenter
 
 custom:
-  documentation: ${file(serverless.doc.yml):documentation}
+  productsDynamoDBTableName: "products-${self:service}-${sls:stage}"
+  stocksDynamoDBTableName: "stocks-${self:service}-${sls:stage}"
   esbuild:
     bundle: true
     minify: true

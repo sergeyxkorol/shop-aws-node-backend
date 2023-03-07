@@ -1,16 +1,14 @@
-import { products } from "@data/products";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { Product } from "@models/product";
+import { Stock } from "@models/stock";
+import BaseService from "./base.service";
 
-class ProductsService {
-  async getAll(): Promise<Product[] | {}[]> {
-    return Promise.resolve(products);
-  }
+class ProductsService<T, D> extends BaseService<T, D> {}
 
-  async getById(id: string): Promise<Product | {}> {
-    const product = products.find((product: Product) => product.id === id);
-
-    return Promise.resolve(product);
-  }
-}
-
-export default new ProductsService();
+export default new ProductsService<Product, Stock>({
+  client: DynamoDBDocumentClient.from(new DynamoDBClient({})),
+  tableName: process.env.PRODUCTS_DYNAMODB_TABLE,
+  relatedTableName: process.env.STOCKS_DYNAMODB_TABLE,
+  storedItemName: "product",
+});
