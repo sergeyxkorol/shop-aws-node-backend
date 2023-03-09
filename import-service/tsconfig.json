@@ -1,12 +1,10 @@
 {
   "extends": "../tsconfig.json",
+  "include": ["./**/*.ts"],
   "compilerOptions": {
     "baseUrl": ".",
-    "include": ["import-service/**/*.ts"],
     "paths": {
       "@functions/*": ["functions/*"],
-      "@data/*": ["data/*"],
-      "@models/*": ["models/*"],
       "@services/*": ["services/*"],
       "@constants/*": ["constants/*"]
     }

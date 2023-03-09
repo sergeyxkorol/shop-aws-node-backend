@@ -1,8 +1,8 @@
 {
   "extends": "../tsconfig.json",
+  "include": ["./**/*.ts"],
   "compilerOptions": {
     "baseUrl": ".",
-    "include": ["product-service/**/*.ts"],
     "paths": {
       "@functions/*": ["functions/*"],
       "@data/*": ["data/*"],
