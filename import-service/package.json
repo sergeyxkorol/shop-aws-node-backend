@@ -5,7 +5,7 @@
   "main": "serverless.ts",
   "scripts": {
     "deploy": "npx sls deploy",
-    "serverless:offline": "sls offline",
+    "serverless:offline": "sls offline --httpPort 3001",
     "test": "jest --watch",
     "test:coverage": "jest --coverage"
   },

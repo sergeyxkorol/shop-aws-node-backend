@@ -6,16 +6,21 @@ useDotenv: true
 provider:
   name: aws
   runtime: nodejs18.x
-  region: ${env:region}
+  region: ${env:REGION}
   profile: default
+  httpApi:
+    cors: true
+  logs:
+    httpApi: true
   iam:
     role:
       statements:
         - Effect: Allow
           Action:
-            - s3:ListBucket
+            - s3:*
           Resource:
-            - ${env:BUCKET}
+            - arn:aws:s3:::${env:BUCKET}
+            - arn:aws:s3:::${env:BUCKET}/*
 
 functions:
   importProductsFile:
@@ -34,3 +39,10 @@ plugins:
   - serverless-esbuild
   - serverless-offline
   - serverless-dotenv-plugin
+
+custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    target: "node18"

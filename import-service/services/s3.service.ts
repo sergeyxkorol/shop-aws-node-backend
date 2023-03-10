@@ -1,5 +1,5 @@
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { SIGNED_URL_EXPIRES_IN } from "@constants/s3Client";
 
 class S3ClientService {
@@ -10,7 +10,7 @@ class S3ClientService {
   }
 
   public async getSignedUrl(commands) {
-    const input = new GetObjectCommand(commands);
+    const input = new PutObjectCommand(commands);
 
     return await getSignedUrl(this.s3Client, input, {
       expiresIn: SIGNED_URL_EXPIRES_IN,
