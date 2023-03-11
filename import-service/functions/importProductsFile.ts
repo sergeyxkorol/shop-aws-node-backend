@@ -1,9 +1,9 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
 import S3Service from "@services/s3.service";
 import { CORS_HEADERS } from "@constants/headers";
 import { ERROR_500 } from "@constants/errors";
+import { APIGatewayProxyEvent } from "aws-lambda";
 
-export const importProductsFile = async (event: APIGatewayProxyEvent) => {
+export const importProductsFile = async (event: APIGatewayProxyEvent | any) => {
   try {
     const path = `uploaded/${event.queryStringParameters?.name}`;
     const headers = CORS_HEADERS;

@@ -7,11 +7,11 @@ module.exports = {
   },
 
   moduleNameMapper: {
-    "@data/products": "<rootDir>/ProductService/data/products",
-    "@models/products": "<rootDir>/ProductService/models/products",
-    "@services/products.service":
-      "<rootDir>/ProductService/services/products.service",
-    "@constants/errors": "<rootDir>/ProductService/constants/errors",
-    "@constants/headers": "<rootDir>/ProductService/constants/headers",
+    "@data/products": "<rootDir>/data/products",
+    "@models/product": "<rootDir>/models/product",
+    "@services/products.service": "<rootDir>/services/products.service",
+    "@services/stocks.service": "<rootDir>/services/stocks.service",
+    "@constants/errors": "<rootDir>/constants/errors",
+    "@constants/headers": "<rootDir>/constants/headers",
   },
 };
