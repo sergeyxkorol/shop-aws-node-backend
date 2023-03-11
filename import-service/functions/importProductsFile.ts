@@ -5,13 +5,10 @@ import { ERROR_500 } from "@constants/errors";
 
 export const importProductsFile = async (event: APIGatewayProxyEvent) => {
   try {
-    const fileName = event.queryStringParameters?.name;
-    const path = `uploaded/${fileName}`;
-    const { BUCKET } = process.env;
+    const path = `uploaded/${event.queryStringParameters?.name}`;
     const headers = CORS_HEADERS;
-    const params = { Bucket: BUCKET, Key: path };
 
-    const signedUrl = await S3Service.getSignedUrl(params);
+    const signedUrl = await S3Service.getSignedUrl(path);
 
     return {
       headers,
