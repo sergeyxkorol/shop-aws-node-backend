@@ -22,7 +22,9 @@ export const importFileParser = async (event: S3CreateEvent) => {
       await S3Service.copyObject(name, folder, destinationFolder);
       await S3Service.deleteObject(s3Object);
 
-      console.log(`${s3Object} has been moved to the "parsed" folder`);
+      console.log(
+        `${s3Object} has been moved to the "${destinationFolder}" folder`
+      );
     }
   } catch (error) {
     console.error("importFileParser error", error);
