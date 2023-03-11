@@ -1,5 +1,11 @@
+import { Stream } from "stream";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  GetObjectCommandOutput,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { SIGNED_URL_EXPIRES_IN } from "@constants/s3Client";
 
 class S3ClientService {
@@ -15,6 +21,16 @@ class S3ClientService {
     return await getSignedUrl(this.s3Client, input, {
       expiresIn: SIGNED_URL_EXPIRES_IN,
     });
+  }
+
+  public async getObject(commands) {
+    const input = new GetObjectCommand(commands);
+
+    return await this.s3Client.send(input);
+  }
+
+  public getObjectAsStream(response: GetObjectCommandOutput) {
+    return response.Body as Stream;
   }
 }
 

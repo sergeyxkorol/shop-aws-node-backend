@@ -15,11 +15,14 @@ provider:
   iam:
     role:
       statements:
-        - Effect: Allow
-          Action:
-            - s3:*
+        - Effect: "Allow"
+          Action: "s3:ListBucket"
           Resource:
             - arn:aws:s3:::${env:BUCKET}
+        - Effect: "Allow"
+          Action:
+            - "s3:*"
+          Resource:
             - arn:aws:s3:::${env:BUCKET}/*
 
 functions:
@@ -34,6 +37,15 @@ functions:
             parameters:
               querystrings:
                 name: true
+  importFileParser:
+    handler: functions/index.importFileParser
+    events:
+      - s3:
+          bucket: ${env:BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
 
 plugins:
   - serverless-esbuild
