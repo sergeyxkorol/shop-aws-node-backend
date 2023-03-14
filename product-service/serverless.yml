@@ -54,7 +54,7 @@ resources:
 
 functions:
   getProductsList:
-    handler: ProductService/functions/index.getProductsList
+    handler: functions/index.getProductsList
     events:
       - http:
           path: products
@@ -62,7 +62,7 @@ functions:
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductsList}
   getProductById:
-    handler: ProductService/functions/index.getProductById
+    handler: functions/index.getProductById
     events:
       - http:
           path: products/{productId}
@@ -70,7 +70,7 @@ functions:
           cors: true
           documentation: ${file(serverless.doc.yml):endpoints.getProductById}
   createProduct:
-    handler: ProductService/functions/index.createProduct
+    handler: functions/index.createProduct
     events:
       - http:
           path: products
