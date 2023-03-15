@@ -6,7 +6,8 @@
     "paths": {
       "@functions/*": ["functions/*"],
       "@services/*": ["services/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@models/*": ["models/*"]
     }
   }
 }

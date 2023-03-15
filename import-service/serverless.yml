@@ -8,6 +8,11 @@ provider:
   runtime: nodejs18.x
   region: ${env:REGION}
   profile: default
+
+  environment:
+    SQS_URL:
+      Ref: catalogItemsQueue
+
   httpApi:
     cors: true
   logs:
@@ -24,6 +29,25 @@ provider:
             - "s3:*"
           Resource:
             - arn:aws:s3:::${env:BUCKET}/*
+        - Effect: "Allow"
+          Action:
+            - "sqs:*"
+          Resource:
+            - Fn::GetAtt: [catalogItemsQueue, Arn]
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:PutItem
+          Resource:
+            - arn:aws:dynamodb:us-east-1:714262839161:table/products-shop-aws-node-backend-dev
+
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${env:SQS_QUEUE_NAME}
 
 functions:
   importProductsFile:
@@ -46,6 +70,15 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+  catalogBatchProcess:
+    handler: functions/index.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
+          batchSize: 5
 
 plugins:
   - serverless-esbuild
