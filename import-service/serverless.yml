@@ -12,6 +12,8 @@ provider:
   environment:
     SQS_URL:
       Ref: catalogItemsQueue
+    SNS_ARN:
+      Ref: createProductTopic
 
   httpApi:
     cors: true
@@ -34,6 +36,11 @@ provider:
             - "sqs:*"
           Resource:
             - Fn::GetAtt: [catalogItemsQueue, Arn]
+        - Effect: "Allow"
+          Action:
+            - "sns:*"
+          Resource:
+            Ref: createProductSubscription
         - Effect: Allow
           Action:
             - dynamodb:Query
@@ -48,6 +55,17 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${env:SQS_QUEUE_NAME}
+    createProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${env:SNS_TOPIC_NAME}
+    createProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_TOPIC_SUBSCRIPTION_EMAIL_1}
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
 
 functions:
   importProductsFile:
