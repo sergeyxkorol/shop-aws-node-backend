@@ -1,11 +1,11 @@
+import { SQSEvent } from "aws-lambda";
 import { ERROR_500 } from "@constants/errors";
 import { IncomingProduct } from "@models/Product";
 import ProductsService from "@services/products.service";
 import SnsService from "@services/sns.service";
-import { SQSEvent } from "aws-lambda";
-import { parseProduct } from "utils/parseProduct";
+import { parseProduct } from "@utils/parseProduct";
 
-export const catalogBatchProcess = async (event: SQSEvent) => {
+export const catalogBatchProcess = async (event: SQSEvent | any) => {
   try {
     for await (const record of event.Records) {
       const parsedRecord: IncomingProduct = JSON.parse(record.body);

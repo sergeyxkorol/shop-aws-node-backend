@@ -7,7 +7,8 @@
       "@functions/*": ["functions/*"],
       "@services/*": ["services/*"],
       "@constants/*": ["constants/*"],
-      "@models/*": ["models/*"]
+      "@models/*": ["models/*"],
+      "@utils/*": ["utils/*"]
     }
   }
 }
