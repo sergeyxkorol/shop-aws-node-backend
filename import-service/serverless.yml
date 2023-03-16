@@ -46,6 +46,11 @@ provider:
             - "sns:*"
           Resource:
             Ref: createProductSubscription
+        - Effect: "Allow"
+          Action:
+            - "sns:*"
+          Resource:
+            Ref: filteredCreateProductSubscription
         - Effect: Allow
           Action:
             - dynamodb:Query
@@ -71,6 +76,16 @@ resources:
         Protocol: email
         TopicArn:
           Ref: createProductTopic
+    filteredCreateProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_TOPIC_SUBSCRIPTION_EMAIL_2}
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
+        FilterPolicy:
+          title:
+            - My new awesome product 1
 
 functions:
   importProductsFile:
@@ -101,7 +116,7 @@ functions:
             Fn::GetAtt:
               - catalogItemsQueue
               - Arn
-          batchSize: ${env:SQS_QUEUE_BATCH_SIZE}
+          batchSize: 5
           maximumBatchingWindow: ${env:SQS_QUEUE_MAXIMUM_BATCHING_WINDOW}
 
 plugins:
