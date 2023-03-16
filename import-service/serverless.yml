@@ -40,6 +40,11 @@ provider:
           Action:
             - "sns:*"
           Resource:
+            Ref: createProductTopic
+        - Effect: "Allow"
+          Action:
+            - "sns:*"
+          Resource:
             Ref: createProductSubscription
         - Effect: Allow
           Action:
@@ -47,7 +52,7 @@ provider:
             - dynamodb:Scan
             - dynamodb:PutItem
           Resource:
-            - arn:aws:dynamodb:us-east-1:714262839161:table/products-shop-aws-node-backend-dev
+            - arn:aws:dynamodb:${env:REGION}:${env:USER}:table/${env:PRODUCTS_DYNAMODB_TABLE}
 
 resources:
   Resources:
@@ -96,7 +101,8 @@ functions:
             Fn::GetAtt:
               - catalogItemsQueue
               - Arn
-          batchSize: 5
+          batchSize: ${env:SQS_QUEUE_BATCH_SIZE}
+          maximumBatchingWindow: ${env:SQS_QUEUE_MAXIMUM_BATCHING_WINDOW}
 
 plugins:
   - serverless-esbuild
