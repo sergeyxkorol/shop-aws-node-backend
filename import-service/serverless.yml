@@ -17,6 +17,14 @@ provider:
 
   httpApi:
     cors: true
+    authorizers:
+      httpApiRequestAuthorizer:
+        name: httpApiRequestAuthorizer
+        type: request
+        functionArn: arn:aws:lambda:${env:REGION}:${env:USER}:function:shop-aws-node-authorization-service-dev-basicAuthorizer
+        enableSimpleResponse: true
+        payloadVersion: "2.0"
+
   logs:
     httpApi: true
   iam:
@@ -99,6 +107,10 @@ functions:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+            type: token
+            arn: arn:aws:lambda:${env:REGION}:${env:USER}:function:shop-aws-node-authorization-service-dev-basicAuthorizer
+
   importFileParser:
     handler: functions/index.importFileParser
     events:
