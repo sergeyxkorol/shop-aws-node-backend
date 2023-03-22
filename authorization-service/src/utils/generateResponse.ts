@@ -1,4 +1,4 @@
-import { Effect } from "../constants/effect";
+import { Effect } from "@constants/effect";
 import { generatePolicyDocument } from "./generatePolicyDocument";
 
 export const generateResponse = (

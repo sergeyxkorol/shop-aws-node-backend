@@ -1,6 +1,6 @@
 import { APIGatewayTokenAuthorizerEvent } from "aws-lambda";
-import { Effect } from "src/constants/effect";
-import { generateResponse } from "src/utils/generateResponse";
+import { Effect } from "@constants/effect";
+import { generateResponse } from "@utils/generateResponse";
 
 export const basicAuthorizer = async (
   event: APIGatewayTokenAuthorizerEvent

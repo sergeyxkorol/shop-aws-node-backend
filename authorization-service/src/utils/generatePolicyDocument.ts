@@ -1,5 +1,5 @@
 import { PolicyDocument } from "aws-lambda";
-import { Effect } from "../constants/effect";
+import { Effect } from "@constants/effect";
 
 export const generatePolicyDocument = (
   effect: Effect,

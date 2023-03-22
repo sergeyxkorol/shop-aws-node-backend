@@ -4,11 +4,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@functions/*": ["functions/*"],
-      "@services/*": ["services/*"],
-      "@constants/*": ["constants/*"],
-      "@models/*": ["models/*"],
-      "@utils/*": ["utils/*"]
+      "@functions/*": ["src/functions/*"],
+      "@constants/*": ["src/constants/*"],
+      "@utils/*": ["src/utils/*"]
     }
   }
 }
