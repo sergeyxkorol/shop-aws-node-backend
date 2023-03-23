@@ -1,6 +1,7 @@
 import { S3CreateEvent } from "aws-lambda";
 import csvParser from "csv-parser";
 import S3Service from "@services/s3.service";
+import SQSService from "@services/sqs.service";
 
 export const importFileParser = async (event: S3CreateEvent) => {
   const destinationFolder = "parsed";
@@ -13,10 +14,11 @@ export const importFileParser = async (event: S3CreateEvent) => {
       const stream = S3Service.getObjectAsStream(response).pipe(csvParser());
 
       for await (const chunk of stream) {
-        console.log(`${s3Object} - stream chunk:`, chunk);
+        await SQSService.sendMessage({
+          QueueUrl: process.env.SQS_URL,
+          MessageBody: JSON.stringify(chunk),
+        });
       }
-
-      console.log(`${s3Object} - Parsing completed`);
 
       const [folder, name] = s3Object.split("/");
       await S3Service.copyObject(name, folder, destinationFolder);

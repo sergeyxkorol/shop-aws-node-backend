@@ -8,6 +8,13 @@ provider:
   runtime: nodejs18.x
   region: ${env:REGION}
   profile: default
+
+  environment:
+    SQS_URL:
+      Ref: catalogItemsQueue
+    SNS_ARN:
+      Ref: createProductTopic
+
   httpApi:
     cors: true
   logs:
@@ -24,6 +31,61 @@ provider:
             - "s3:*"
           Resource:
             - arn:aws:s3:::${env:BUCKET}/*
+        - Effect: "Allow"
+          Action:
+            - "sqs:*"
+          Resource:
+            - Fn::GetAtt: [catalogItemsQueue, Arn]
+        - Effect: "Allow"
+          Action:
+            - "sns:*"
+          Resource:
+            Ref: createProductTopic
+        - Effect: "Allow"
+          Action:
+            - "sns:*"
+          Resource:
+            Ref: createProductSubscription
+        - Effect: "Allow"
+          Action:
+            - "sns:*"
+          Resource:
+            Ref: filteredCreateProductSubscription
+        - Effect: Allow
+          Action:
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:PutItem
+          Resource:
+            - arn:aws:dynamodb:${env:REGION}:${env:USER}:table/${env:PRODUCTS_DYNAMODB_TABLE}
+
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${env:SQS_QUEUE_NAME}
+    createProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${env:SNS_TOPIC_NAME}
+    createProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_TOPIC_SUBSCRIPTION_EMAIL_1}
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
+    filteredCreateProductSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: ${env:SNS_TOPIC_SUBSCRIPTION_EMAIL_2}
+        Protocol: email
+        TopicArn:
+          Ref: createProductTopic
+        FilterPolicy:
+          title:
+            - My new awesome product 1
 
 functions:
   importProductsFile:
@@ -46,6 +108,16 @@ functions:
           rules:
             - prefix: uploaded/
           existing: true
+  catalogBatchProcess:
+    handler: functions/index.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
+          batchSize: 5
+          maximumBatchingWindow: ${env:SQS_QUEUE_MAXIMUM_BATCHING_WINDOW}
 
 plugins:
   - serverless-esbuild
