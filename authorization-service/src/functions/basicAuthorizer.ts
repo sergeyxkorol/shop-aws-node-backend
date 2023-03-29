@@ -6,14 +6,26 @@ export const basicAuthorizer = async (
   event: APIGatewayTokenAuthorizerEvent
 ) => {
   const { authorizationToken, methodArn } = event;
+  let userName = "";
+  let effect: Effect;
 
-  const decodedToken: string = Buffer.from(
-    authorizationToken,
-    "base64"
-  ).toString();
-  const [userName, password] = decodedToken.split(" ");
-  const storedPassword = process.env[userName];
-  const effect = password === storedPassword ? Effect.Allow : Effect.Deny;
+  try {
+    const [_, encodedToken] = authorizationToken.split(" ");
+    const decodedToken: string = Buffer.from(encodedToken, "base64").toString(
+      "utf-8"
+    );
+    const [name, password] = decodedToken.split(":");
+    const isCorrectToken = authorizationToken && name && password;
+    const storedPassword = process.env[name];
+    const isValidCredentials = isCorrectToken && password === storedPassword;
 
-  return generateResponse(userName, effect, methodArn);
+    userName = name;
+    effect = isValidCredentials ? Effect.Allow : Effect.Deny;
+  } catch (error) {
+    console.error(error);
+
+    effect = Effect.Deny;
+  } finally {
+    return generateResponse(userName, effect, methodArn);
+  }
 };
