@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "include": ["./**/*.ts"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@functions/*": ["src/functions/*"],
+      "@constants/*": ["src/constants/*"],
+      "@utils/*": ["src/utils/*"]
+    }
+  }
+}

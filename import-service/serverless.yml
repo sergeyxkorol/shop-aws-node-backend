@@ -17,6 +17,7 @@ provider:
 
   httpApi:
     cors: true
+
   logs:
     httpApi: true
   iam:
@@ -86,6 +87,15 @@ resources:
         FilterPolicy:
           title:
             - My new awesome product 1
+    Unauthorized:
+      Type: AWS::ApiGateway::GatewayResponse
+      Properties:
+        ResponseParameters:
+          "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
+          "gatewayresponse.header.Access-Control-Allow-Headers": "'*'"
+        ResponseType: "DEFAULT_4XX"
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
 
 functions:
   importProductsFile:
@@ -99,6 +109,10 @@ functions:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+            type: token
+            arn: arn:aws:lambda:${env:REGION}:${env:USER}:function:shop-aws-node-authorization-service-dev-basicAuthorizer
+
   importFileParser:
     handler: functions/index.importFileParser
     events:
